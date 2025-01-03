@@ -32,7 +32,6 @@ public class TestEncryptor {
             testEncryptor(des, dataBytes, desKey);
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
