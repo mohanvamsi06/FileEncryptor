@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class Decryptor{
+public class Decryptor{
     public int DecryptFile(String filename, String pass, String algo, boolean keepOriginal){
         int keySize;
         EncryptionService decryptor;
