@@ -3,7 +3,7 @@ package com.mohanvamsi06.FileEncryptor.test;
 import com.mohanvamsi06.FileEncryptor.encryptor.*;
 import java.util.Arrays;
 
-public class TestEncryptor {
+public class TestEncryptionService {
 
     public static void main(String[] args) {
         try {
