@@ -1,20 +1,19 @@
 package com.mohanvamsi06.FileEncryptor.ui;
 
+import com.mohanvamsi06.FileEncryptor.encryptor.Decryptor;
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.io.File;
 import javax.swing.*;
 
-public class MainUI{
-    public static void LaunchUI(){
-        JFrame frame = new JFrame("File Encryptor Test UI");
+public class MainUI {
+    public static void LaunchUI() {
+        JFrame frame = new JFrame("File Encryptor");
         frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setMinimumSize(new Dimension(800, 500));
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -59,7 +58,6 @@ public class MainUI{
         JCheckBox keepOriginalCheckBox = new JCheckBox("Keep Original File", true);
         keepOriginalCheckBox.setFont(labelFont);
 
-        // **Reduced Encrypt & Decrypt button size**
         JButton encryptButton = new JButton("Encrypt");
         encryptButton.setFont(buttonFont);
         encryptButton.setPreferredSize(new Dimension(160, 40));
@@ -119,6 +117,7 @@ public class MainUI{
         gbc.gridwidth = 2;
         panel.add(buttonPanel, gbc);
 
+        // ** File Selection Listener **
         selectFileButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int returnValue = fileChooser.showOpenDialog(null);
@@ -130,48 +129,69 @@ public class MainUI{
             }
         });
 
-        encryptButton.addActionListener(e -> System.out.println("Encryption Started"));
-        decryptButton.addActionListener(e -> System.out.println("Decryption Started"));
+        // ** Encrypt Button Listener **
+        encryptButton.addActionListener(e -> {
+            String filePath = fileTextField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
 
-        // **Resize dynamically while keeping buttons balanced**
-        frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int width = frame.getWidth();
-                int height = frame.getHeight();
+            if (filePath.equals("No file selected")) {
+                JOptionPane.showMessageDialog(frame, "Please select a file to encrypt!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                int newFontSize = Math.max(width / 50, 16);
-                Font newFont = new Font("Arial", Font.BOLD, newFontSize);
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a password!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                selectFileButton.setFont(newFont);
-                encryptButton.setFont(newFont);
-                decryptButton.setFont(newFont);
-                fileTextField.setFont(new Font("Arial", Font.PLAIN, newFontSize));
-                passwordField.setFont(new Font("Arial", Font.PLAIN, newFontSize));
-                confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, newFontSize));
-                passwordLabel.setFont(newFont);
-                confirmPasswordLabel.setFont(newFont);
-                algorithmLabel.setFont(newFont);
-                desButton.setFont(newFont);
-                aesButton.setFont(newFont);
-                blowfishButton.setFont(newFont);
-                keepOriginalCheckBox.setFont(newFont);
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(frame, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                // Scale buttons based on window size
-                int buttonWidth = Math.max(width / 8, 160);
-                int buttonHeight = Math.max(height / 15, 40);
-                Dimension newButtonSize = new Dimension(buttonWidth, buttonHeight);
+            String algorithm = desButton.isSelected() ? "des" : aesButton.isSelected() ? "aes" : "blowfish";
+            boolean keepOriginal = keepOriginalCheckBox.isSelected();
 
-                selectFileButton.setPreferredSize(newButtonSize);
-                encryptButton.setPreferredSize(newButtonSize);
-                decryptButton.setPreferredSize(newButtonSize);
+            Encryptor encryptor = new Encryptor();
+            int result = encryptor.EncryptFile(filePath, password, algorithm, keepOriginal);
 
-                panel.revalidate();
-                panel.repaint();
+            if (result == 0) {
+                JOptionPane.showMessageDialog(frame, "Encryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Encryption failed! Error code: " + result, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // ** Decrypt Button Listener **
+        decryptButton.addActionListener(e -> {
+            String filePath = fileTextField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (filePath.equals("No file selected")) {
+                JOptionPane.showMessageDialog(frame, "Please select a file to decrypt!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a password!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String algorithm = desButton.isSelected() ? "des" : aesButton.isSelected() ? "aes" : "blowfish";
+            boolean keepOriginal = keepOriginalCheckBox.isSelected();
+
+            Decryptor decryptor = new Decryptor();
+            int result = decryptor.DecryptFile(filePath, password, algorithm, keepOriginal);
+
+            if (result == 0) {
+                JOptionPane.showMessageDialog(frame, "Decryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Decryption failed! Error code: " + result, "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         frame.add(panel);
         frame.setVisible(true);
-    }    
+    }
 }
