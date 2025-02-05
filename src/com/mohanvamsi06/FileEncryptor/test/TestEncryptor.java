@@ -18,15 +18,15 @@ class TestEncryptor{
         System.out.println(enc.EncryptFile(file4, password, "blowfish", true));
 
         Decryptor dec = new Decryptor();
-        String file11 = "/home/vamsi/Desktop/TEST/test1.txt.enc";
-        String file21 = "/home/vamsi/Desktop/TEST/test2.txt.enc";
-        String file31 = "/home/vamsi/Desktop/TEST/test3.txt.enc";
-        String file41 = "/home/vamsi/Desktop/TEST/test4.txt.enc";
+        String file11 = "/home/vamsi/Desktop/TEST/test1.enc";
+        String file21 = "/home/vamsi/Desktop/TEST/test2.enc";
+        String file31 = "/home/vamsi/Desktop/TEST/test3.enc";
+        String file41 = "/home/vamsi/Desktop/TEST/test4.enc";
         System.out.println("Starting Decryption!!");
-        System.out.println(dec.DecryptFile(file11, password, "aes", true));
-        System.out.println(dec.DecryptFile(file21, password, "aes", false));
-        System.out.println(dec.DecryptFile(file31, password, "des", true));
-        System.out.println(dec.DecryptFile(file41, password, "blowfish", false));
+        System.out.println(dec.DecryptFile(file11, password, true));
+        System.out.println(dec.DecryptFile(file21, password, false));
+        System.out.println(dec.DecryptFile(file31, password, true));
+        System.out.println(dec.DecryptFile(file41, password, false));
 
         System.out.println("Closing program!!");
     }

@@ -182,7 +182,7 @@ public class MainUI {
             boolean keepOriginal = keepOriginalCheckBox.isSelected();
 
             Decryptor decryptor = new Decryptor();
-            int result = decryptor.DecryptFile(filePath, password, algorithm, keepOriginal);
+            int result = decryptor.DecryptFile(filePath, password, keepOriginal);
 
             if (result == 0) {
                 JOptionPane.showMessageDialog(frame, "Decryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
