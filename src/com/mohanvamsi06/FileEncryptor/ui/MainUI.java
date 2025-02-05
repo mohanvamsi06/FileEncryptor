@@ -178,7 +178,6 @@ public class MainUI {
                 return;
             }
 
-            String algorithm = desButton.isSelected() ? "des" : aesButton.isSelected() ? "aes" : "blowfish";
             boolean keepOriginal = keepOriginalCheckBox.isSelected();
 
             Decryptor decryptor = new Decryptor();
