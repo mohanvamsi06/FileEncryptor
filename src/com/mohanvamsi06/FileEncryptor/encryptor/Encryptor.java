@@ -10,20 +10,32 @@ import java.nio.file.Paths;
 
 public class Encryptor{
     public int EncryptFile(String filename, String pass, String algo, boolean keepOriginal){
+        int indexDot = filename.lastIndexOf(".");
+        String extension;
+        if (indexDot > 0 && indexDot < filename.length() - 1) {
+            extension = filename.substring(indexDot);
+        } else {
+            extension = ""; 
+        }
+        int lengthOfExtension = extension.length();
         int keySize;
         EncryptionService encryptor;
+        byte algoType;
         switch (algo) {
             case "des" -> {
                 keySize = 8;
                 encryptor = new DESUtil();
+                algoType = 1;
             }
             case "aes" -> {
                 keySize = 16;
                 encryptor = new AESUtil();
+                algoType = 2;
             }
             case "blowfish" -> {
                 keySize = 16;
                 encryptor = new BlowfishUtil();
+                algoType = 3;
             }
             default -> {
                 return 101;
@@ -35,9 +47,17 @@ public class Encryptor{
 
         File file = new File(filename);
         byte[] fileBytes;
+        long fileLength = file.length();
+        if (fileLength > (Integer.MAX_VALUE - (lengthOfExtension + 2))){
+            return 106;
+        }
         try (FileInputStream fis = new FileInputStream(file)) {
-            fileBytes = new byte[(int) file.length()]; 
-            fis.read(fileBytes); 
+            fileBytes = new byte[((int) fileLength) + 2 + lengthOfExtension]; 
+            fis.read(fileBytes);
+            fileBytes[(int) fileLength] = '@';
+            fileBytes[(int) fileLength+1] = '@';
+            byte[] extensionName = extension.getBytes();
+            System.arraycopy(extensionName, 0, fileBytes, (int) fileLength+2, lengthOfExtension);
         } catch (IOException e) {
             return 102;
         }
@@ -49,10 +69,11 @@ public class Encryptor{
             return 103;
         }
 
-        String encryptedFilename = filename + ".enc";
+        String encryptedFilename = filename.substring(0, indexDot) + ".enc";
         File encryptedfile = new File(encryptedFilename);
         try (FileOutputStream fos = new FileOutputStream(encryptedfile)) {
             fos.write(encryptedData); 
+            fos.write(algoType);
         } catch (IOException e) {
             return 104;
         }

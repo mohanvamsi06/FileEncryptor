@@ -7,6 +7,7 @@ FileEncryptor is a Java-based application that provides file encryption and decr
 - **Encrypt Files**: Secure your files using AES, DES, or Blowfish encryption algorithms.
 - **Decrypt Files**: Restore your encrypted files to their original state.
 - **User-Friendly Interface**: A graphical user interface (GUI) built with Java Swing for easy interaction.
+- **Size Limit**: Files up to the size of 2GB (approx 2.14) can be Encrypted.
 
 ## Prerequisites
 

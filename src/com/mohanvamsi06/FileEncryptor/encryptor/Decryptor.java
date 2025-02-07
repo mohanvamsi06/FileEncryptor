@@ -9,19 +9,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Decryptor{
-    public int DecryptFile(String filename, String pass, String algo, boolean keepOriginal){
+    public int DecryptFile(String filename, String pass, boolean keepOriginal){
         int keySize;
         EncryptionService decryptor;
+        byte algo;
+        File file = new File(filename);
+        byte[] fileBytes;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fileBytes = new byte[(int) file.length() - 1]; 
+            byte[] algoByte = new byte[1];
+            fis.read(fileBytes); 
+            fis.read(algoByte);
+            algo = algoByte[0];
+        } catch (IOException e) {
+            return 102;
+        }
+        
         switch (algo) {
-            case "des" -> {
+            case 1 -> {
                 keySize = 8;
                 decryptor = new DESUtil();
             }
-            case "aes" -> {
+            case 2 -> {
                 keySize = 16;
                 decryptor = new AESUtil();
             }
-            case "blowfish" -> {
+            case 3 -> {
                 keySize = 16;
                 decryptor = new BlowfishUtil();
             }
@@ -32,16 +45,6 @@ public class Decryptor{
         
         KeyGen generator = new KeyGen();
         byte[] key = generator.KeyGen(keySize, pass);
-
-        File file = new File(filename);
-        byte[] fileBytes;
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fileBytes = new byte[(int) file.length()]; 
-            fis.read(fileBytes); 
-        } catch (IOException e) {
-            return 102;
-        }
-
         byte[] decryptedData;
         try {
             decryptedData = decryptor.decrypt(fileBytes, key);
@@ -49,10 +52,25 @@ public class Decryptor{
             return 103;
         }
 
-        String decryptedFilename = filename.substring(0, filename.length() - 4);
+        int ind = 0;
+        int fileLength = decryptedData.length;
+        for (int i = fileLength-1; i>0; i--){
+            if (decryptedData[i] == '@' && decryptedData[i-1] == '@'){
+                ind = i;
+                break;
+            }
+        }
+        int extensionLength = fileLength - ind - 1;
+        byte[] extension = new byte[extensionLength];
+        for(int i = 0; i< extensionLength; i++){
+            extension[i] = decryptedData[ind+1+i];
+        }
+        String extensionString = new String(extension);
+ 
+        String decryptedFilename = filename.substring(0, filename.length() - 4) + extensionString;
         File decryptedfile = new File(decryptedFilename);
         try (FileOutputStream fos = new FileOutputStream(decryptedfile)) {
-            fos.write(decryptedData); 
+            fos.write(decryptedData, 0, ind-1); 
         } catch (IOException e) {
             return 104;
         }
