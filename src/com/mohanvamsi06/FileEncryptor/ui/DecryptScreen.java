@@ -1,6 +1,8 @@
 package com.mohanvamsi06.FileEncryptor.ui;
 
-import com.mohanvamsi06.FileEncryptor.encryptor.Decryptor;
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
+import com.mohanvamsi06.FileEncryptor.encryptor.impl.EncryptorImpl;
+
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
@@ -83,14 +85,14 @@ public class DecryptScreen extends JPanel {
 
             boolean keepOriginal = keepOriginalCheckBox.isSelected();
 
-            Decryptor decryptor = new Decryptor();
+            Encryptor decryptor = new EncryptorImpl();
             int result = decryptor.DecryptFile(filePath, password, keepOriginal);
 
             if (result == 0) {
                 JOptionPane.showMessageDialog(this, "Decryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
             } else {
-                String errorMessage = Decryptor.getErrorMessage(result);
+                String errorMessage = Encryptor.getErrorMessage(result);
                 JOptionPane.showMessageDialog(this, "Decryption failed! " + errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
