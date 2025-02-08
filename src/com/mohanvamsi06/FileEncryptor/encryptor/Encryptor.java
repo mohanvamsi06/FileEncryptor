@@ -49,7 +49,7 @@ public class Encryptor{
         byte[] fileBytes;
         long fileLength = file.length();
         if (fileLength > (Integer.MAX_VALUE - (lengthOfExtension + 2))){
-            return 106;
+            return 106; // File Size Exceeds Limit
         }
         try (FileInputStream fis = new FileInputStream(file)) {
             fileBytes = new byte[((int) fileLength) + 2 + lengthOfExtension]; 
@@ -59,14 +59,14 @@ public class Encryptor{
             byte[] extensionName = extension.getBytes();
             System.arraycopy(extensionName, 0, fileBytes, (int) fileLength+2, lengthOfExtension);
         } catch (IOException e) {
-            return 102;
+            return 102; //Error Reading from file
         }
 
         byte[] encryptedData;
         try {
             encryptedData = encryptor.encrypt(fileBytes, key);
         } catch (Exception ex) {
-            return 103;
+            return 103; //Internal Error
         }
 
         String encryptedFilename = filename.substring(0, indexDot) + ".enc";
@@ -75,14 +75,14 @@ public class Encryptor{
             fos.write(encryptedData); 
             fos.write(algoType);
         } catch (IOException e) {
-            return 104;
+            return 104; //Error Writing to new File
         }
         if(keepOriginal==false){
             Path path = Paths.get(filename);
             try {
                 Files.delete(path);
             } catch (IOException ex) {
-                return 105;
+                return 105; //Error Deleting Orginal File
             }
         }
         return 0;

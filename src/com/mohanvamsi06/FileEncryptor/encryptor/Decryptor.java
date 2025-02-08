@@ -22,7 +22,7 @@ public class Decryptor{
             fis.read(algoByte);
             algo = algoByte[0];
         } catch (IOException e) {
-            return 102;
+            return 102; // Error reading the File
         }
         
         switch (algo) {
@@ -49,10 +49,10 @@ public class Decryptor{
         try {
             decryptedData = decryptor.decrypt(fileBytes, key);
         } catch (Exception ex) {
-            return 103;
+            return 103; // Error during decryption, (Possible Wrong password)
         }
 
-        int ind = 0;
+        int ind = -1;
         int fileLength = decryptedData.length;
         for (int i = fileLength-1; i>0; i--){
             if (decryptedData[i] == '@' && decryptedData[i-1] == '@'){
@@ -60,6 +60,8 @@ public class Decryptor{
                 break;
             }
         }
+        if (ind == -1) return 106; // Decryption Failed or Password wrong or Encrypted using different application;
+
         int extensionLength = fileLength - ind - 1;
         byte[] extension = new byte[extensionLength];
         for(int i = 0; i< extensionLength; i++){
@@ -72,14 +74,14 @@ public class Decryptor{
         try (FileOutputStream fos = new FileOutputStream(decryptedfile)) {
             fos.write(decryptedData, 0, ind-1); 
         } catch (IOException e) {
-            return 104;
+            return 104; //Error Writing to new file
         }
         if(keepOriginal==false){
             Path path = Paths.get(filename);
             try {
                 Files.delete(path);
             } catch (IOException ex) {
-                return 105;
+                return 105; //Error Deleting Original File
             }
         }
         return 0;

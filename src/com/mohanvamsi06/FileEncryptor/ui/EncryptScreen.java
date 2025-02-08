@@ -1,9 +1,9 @@
 package com.mohanvamsi06.FileEncryptor.ui;
 
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
 
 public class EncryptScreen extends JPanel {
     private JTextField fileTextField;
@@ -121,6 +121,8 @@ public class EncryptScreen extends JPanel {
 
             if (result == 0) {
                 JOptionPane.showMessageDialog(this, "Encryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
+                keepOriginalCheckBox.setSelected(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Encryption failed! Error code: " + result, "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -183,5 +185,14 @@ public class EncryptScreen extends JPanel {
             passwordField.setEchoChar('*'); // Hide password
             confirmPasswordField.setEchoChar('*');
         }
+    }
+
+    private void clearFields() {
+        fileTextField.setText("No file selected");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        showPasswordCheckBox.setSelected(false);
+        passwordField.setEchoChar('*');
+        confirmPasswordField.setEchoChar('*');
     }
 }
