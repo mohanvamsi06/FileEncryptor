@@ -1,10 +1,11 @@
 package com.mohanvamsi06.FileEncryptor.test;
 
-import com.mohanvamsi06.FileEncryptor.encryptor.*;
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
+import com.mohanvamsi06.FileEncryptor.encryptor.impl.EncryptorImpl;
 
 class TestEncryptor{
     public static void main(String[] args) {
-        Encryptor enc = new Encryptor();
+        Encryptor enc = new EncryptorImpl();
         String password = "mypassword";
         String file1 = "/home/vamsi/Desktop/TEST/test1.txt";
         String file2 = "/home/vamsi/Desktop/TEST/test2.txt";
@@ -17,7 +18,7 @@ class TestEncryptor{
         System.out.println(enc.EncryptFile(file3, password, "des", false));
         System.out.println(enc.EncryptFile(file4, password, "blowfish", true));
 
-        Decryptor dec = new Decryptor();
+        Encryptor dec = new EncryptorImpl();
         String file11 = "/home/vamsi/Desktop/TEST/test1.enc";
         String file21 = "/home/vamsi/Desktop/TEST/test2.enc";
         String file31 = "/home/vamsi/Desktop/TEST/test3.enc";

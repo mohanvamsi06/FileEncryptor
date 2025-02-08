@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-class KeyGen{
+public class KeyGen{
     public byte[] KeyGen (int length, String seed){
         try {
             byte[] hash;
