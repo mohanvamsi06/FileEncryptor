@@ -1,5 +1,6 @@
 package com.mohanvamsi06.FileEncryptor.ui;
 
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
 import com.mohanvamsi06.FileEncryptor.encryptor.impl.EncryptorImpl;
 import java.awt.*;
 import java.io.File;
@@ -116,7 +117,7 @@ public class EncryptScreen extends JPanel {
             String algorithm = desButton.isSelected() ? "des" : aesButton.isSelected() ? "aes" : "blowfish";
             boolean keepOriginal = keepOriginalCheckBox.isSelected();
 
-            EncryptorImpl encryptor = new EncryptorImpl();
+            Encryptor encryptor = new EncryptorImpl();
             int result = encryptor.EncryptFile(filePath, password, algorithm, keepOriginal);
 
             if (result == 0) {
