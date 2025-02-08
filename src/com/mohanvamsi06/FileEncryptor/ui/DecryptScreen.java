@@ -90,7 +90,8 @@ public class DecryptScreen extends JPanel {
                 JOptionPane.showMessageDialog(this, "Decryption successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
             } else {
-                JOptionPane.showMessageDialog(this, "Decryption failed! Error code: " + result, "Error", JOptionPane.ERROR_MESSAGE);
+                String errorMessage = Decryptor.getErrorMessage(result);
+                JOptionPane.showMessageDialog(this, "Decryption failed! " + errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
