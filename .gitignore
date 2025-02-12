@@ -1,3 +1,7 @@
+# Compiled files
 out/
 bin/
+
+# Gradle files
+.gradle/
 build/
