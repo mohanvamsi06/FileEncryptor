@@ -11,7 +11,8 @@ FileEncryptor is a Java-based application that provides file encryption and decr
 
 ## Prerequisites
 
-- **Java Development Kit (JDK)**: Ensure that JDK 8 or higher is installed on your system.
+- **Java Development Kit (JDK)**: Ensure that JDK 16 or higher is installed on your system.
+- **Gradle**: Ensure that gradle 7 or higher is installed on your system.  
 
 ## Installation From Source
 
@@ -30,13 +31,13 @@ FileEncryptor is a Java-based application that provides file encryption and decr
 3. **Compile the Source Code**:
 
    ```bash
-   javac -d bin src/com/mohanvamsi06/FileEncryptor/**/*.java
+   gradle build
    ```
 
 4. **Create a JAR File**:
 
    ```bash
-   jar cfe FileEncryptor.jar com.mohanvamsi06.FileEncryptor.main.Main -C bin .
+   ./gradlew jar 
    ```
 
 ## Usage
@@ -44,7 +45,7 @@ FileEncryptor is a Java-based application that provides file encryption and decr
 - **Run the Application**:
 
   ```bash
-  java -jar FileEncryptor.jar
+  java -jar build/lib/FileEncryptor.jar
   ```
 
 - **Using the GUI**:

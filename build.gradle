@@ -1,0 +1,37 @@
+// Apply plugins
+plugins {
+    id 'java'
+    id 'application'
+}
+
+// Define main class
+application {
+    mainClass = 'com.mohanvamsi06.FileEncryptor.main.Main'
+}
+
+// Define repositories
+repositories {
+    mavenCentral()
+}
+
+// Define dependencies
+dependencies {
+    implementation 'com.google.guava:guava:23.0'
+    testImplementation 'junit:junit:4.12'
+}
+
+// Create a fat JAR (includes dependencies)
+tasks.register('fatJar', Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveClassifier.set('all')
+
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+}
