@@ -5,12 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class KeyGen{
-    public byte[] KeyGen (int length, String seed){
+    public byte[] KeyGenerator (int keyLength, String keySeed){
         try {
             byte[] hash;
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            hash = digest.digest(seed.getBytes(StandardCharsets.UTF_8));
-            byte[] key = new byte[length];
+            hash = digest.digest(keySeed.getBytes(StandardCharsets.UTF_8));
+            byte[] key = new byte[keyLength];
             System.arraycopy(hash, 0, key, 0, Math.min(key.length, hash.length));
             return key;
         } catch (NoSuchAlgorithmException e) {

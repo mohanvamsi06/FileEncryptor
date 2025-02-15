@@ -1,7 +1,5 @@
 package com.mohanvamsi06.FileEncryptor.encryptor.impl;
 
-import com.mohanvamsi06.FileEncryptor.encryptor.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,6 +7,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.mohanvamsi06.FileEncryptor.encryptor.AESUtil;
+import com.mohanvamsi06.FileEncryptor.encryptor.BlowfishUtil;
+import com.mohanvamsi06.FileEncryptor.encryptor.DESUtil;
+import com.mohanvamsi06.FileEncryptor.encryptor.EncryptionService;
+import com.mohanvamsi06.FileEncryptor.encryptor.Encryptor;
+import com.mohanvamsi06.FileEncryptor.encryptor.KeyGen;
 
 public class EncryptorImpl extends Encryptor {
     @Override
@@ -46,7 +51,7 @@ public class EncryptorImpl extends Encryptor {
         }
         
         KeyGen generator = new KeyGen();
-        byte[] key = generator.KeyGen(keySize, pass);
+        byte[] key = generator.KeyGenerator(keySize, pass);
 
         File file = new File(filename);
         byte[] fileBytes;
@@ -128,7 +133,7 @@ public class EncryptorImpl extends Encryptor {
         }
 
         KeyGen generator = new KeyGen();
-        byte[] key = generator.KeyGen(keySize, pass);
+        byte[] key = generator.KeyGenerator(keySize, pass);
         byte[] decryptedData;
         try {
             decryptedData = decryptor.decrypt(fileBytes, key);
